@@ -1,4 +1,4 @@
-FORMA V4
+FORMA V4 — AUTO-UPDATE
 Ajouts :
 - échauffement automatique configurable
 - compte à rebours 3 secondes avant chaque étape

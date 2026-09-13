@@ -226,6 +226,34 @@ function toggleMusic(){
  if(!audio){audio=new AudioContext();const o=audio.createOscillator();const g=audio.createGain();o.frequency.value=220;g.gain.value=.015;o.connect(g).connect(audio.destination);o.start();o.stop(audio.currentTime+999999);toast('Son Forma activé')}
  else if(audio.state==='running'){audio.suspend();toast('Son en pause')}else{audio.resume();toast('Son activé')}
 }
-render();if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
+function showToast(message){
+  const t=document.createElement('div');
+  t.textContent=message;
+  t.style.cssText='position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:9999;background:#17191f;color:#fff;padding:12px 16px;border-radius:14px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.35);max-width:90%;text-align:center';
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),3200);
+}
+render();
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('./sw.js').then(reg=>{
+    reg.update();
+    reg.addEventListener('updatefound',()=>{
+      const worker=reg.installing;
+      if(!worker)return;
+      worker.addEventListener('statechange',()=>{
+        if(worker.state==='installed' && navigator.serviceWorker.controller){
+          showToast('✨ Nouvelle version de Forma disponible');
+          worker.postMessage('SKIP_WAITING');
+        }
+      });
+    });
+  }).catch(()=>{});
+  let refreshing=false;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{
+    if(refreshing)return;
+    refreshing=true;
+    window.location.reload();
+  });
+}
 </script>
 </body></html>
