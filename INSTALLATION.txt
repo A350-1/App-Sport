@@ -1,5 +1,0 @@
-FORMA V1 — INSTALLATION IPHONE
-Cette version est une PWA. Pour l'installer comme une vraie app, elle doit être publiée sur une adresse HTTPS.
-Une fois publiée : ouvrir l'adresse dans Safari → Partager → Ajouter à l'écran d'accueil.
-Après le premier chargement, le service worker permet le fonctionnement hors ligne.
-Les données de séances sont stockées localement sur l'iPhone.
