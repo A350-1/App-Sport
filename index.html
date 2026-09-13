@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#08090c">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Forma</title>
+<style>
+:root{--bg:#08090c;--card:#14161b;--card2:#1b1e25;--text:#f7f7f8;--muted:#9ca1ad;--line:#292d35;--good:#70e6a6;--danger:#ff6868;--accent:#fff}
+*{box-sizing:border-box}html{background:var(--bg)}body{margin:0;background:radial-gradient(circle at 50% -10%,#20242d 0,#08090c 36%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;-webkit-tap-highlight-color:transparent}
+button,input,select,textarea{font:inherit}button{border:0;color:inherit;cursor:pointer;transition:transform .16s,opacity .16s,background .2s}button:active{transform:scale(.97)}
+.app{max-width:560px;margin:auto;min-height:100vh;padding-bottom:100px}
+header{padding:24px 20px 12px;display:flex;justify-content:space-between;align-items:center}h1{font-size:30px;margin:0;font-weight:800;letter-spacing:-.9px}h2{font-size:23px;margin:8px 0 14px;letter-spacing:-.4px}h3{margin:0 0 7px}.muted{color:var(--muted)}
+.screen{display:none;padding:8px 18px}.screen.active{display:block;animation:fade .28s ease}@keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.hero{position:relative;overflow:hidden;background:linear-gradient(145deg,#20242d,#111318);border:1px solid var(--line);border-radius:28px;padding:23px;margin:10px 0 18px;box-shadow:0 18px 45px rgba(0,0,0,.22)}.hero:after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;right:-80px;top:-90px;background:rgba(255,255,255,.05)}.eyebrow{color:var(--muted);font-size:11px;font-weight:800;letter-spacing:1px}.hero strong{display:block;font-size:28px;line-height:1.06;margin:8px 0 19px;max-width:370px}
+.primary{width:100%;background:#f5f5f6;color:#08090c;padding:15px 18px;border-radius:16px;font-weight:800}.secondary{background:var(--card2);padding:11px 14px;border-radius:14px}.danger{color:var(--danger)}.good{color:var(--good)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.stat{background:rgba(20,22,27,.92);border:1px solid var(--line);padding:17px;border-radius:19px}.stat b{font-size:26px;display:block}.stat span{font-size:12px;color:var(--muted)}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin-top:22px}.list{display:flex;flex-direction:column;gap:10px}.row{background:var(--card);border:1px solid var(--line);border-radius:19px;padding:15px}.row-main{display:flex;align-items:center;justify-content:space-between;gap:10px}.info{min-width:0}.info b{display:block;font-size:16px}.info span{display:block;color:var(--muted);font-size:13px;margin-top:4px}.actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.mini{padding:9px 11px;border-radius:11px;background:var(--card2);font-size:13px}.empty{padding:35px 15px;text-align:center;color:var(--muted);background:var(--card);border-radius:20px;border:1px dashed var(--line)}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:9px;background:var(--card2);color:var(--muted);font-size:11px;margin-top:7px}.star{color:#fff}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:rgba(8,9,12,.94);backdrop-filter:blur(20px);border-top:1px solid var(--line);display:flex;justify-content:center;z-index:10}.bottom-inner{width:100%;max-width:560px;display:grid;grid-template-columns:repeat(4,1fr)}.tab{background:none;padding:12px 4px 10px;color:var(--muted);font-size:11px}.tab.active{color:#fff}.tab span{display:block;font-size:19px;margin-bottom:3px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.73);display:none;align-items:flex-end;z-index:20}.modal.open{display:flex}.sheet{width:100%;max-width:560px;margin:auto 0 0;background:#111318;border-radius:29px 29px 0 0;max-height:94vh;overflow:auto;padding:20px}.sheet-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.close{background:var(--card2);width:36px;height:36px;border-radius:50%}
+label{display:block;color:var(--muted);font-size:12px;margin:13px 0 7px}input,select,textarea{width:100%;background:var(--card);color:#fff;border:1px solid var(--line);padding:13px;border-radius:13px;outline:none}textarea{min-height:72px;resize:vertical}
+.type-grid,.option-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.type-btn{padding:12px;border-radius:12px;background:var(--card2);color:var(--muted);font-weight:650}.type-btn.active{background:#f5f5f6;color:#08090c}
+.exercise-edit{border:1px solid var(--line);background:var(--card);border-radius:18px;padding:13px;margin:10px 0}.exercise-edit-top{display:flex;gap:8px;align-items:center}.exercise-edit-top input{flex:1}.exercise-fields{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.check{display:flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--line);padding:12px;border-radius:13px;color:var(--muted);font-size:13px}.check input{width:auto}
+.runner{position:fixed;inset:0;background:#08090c;z-index:30;display:none}.runner.open{display:block}.runner-inner{height:100%;max-width:560px;margin:auto;display:flex;flex-direction:column;padding:20px 20px calc(24px + env(safe-area-inset-bottom))}
+.runner-top{display:flex;justify-content:space-between;align-items:center;color:var(--muted)}.progressbar{height:4px;background:#1c1f26;border-radius:10px;margin:17px 0}.progressbar i{display:block;height:100%;background:#f5f5f6;border-radius:10px;width:0;transition:width .4s}
+.runner-main{flex:1;display:flex;flex-direction:column;justify-content:center;text-align:center}.runner-main .label{color:var(--muted);font-size:12px;font-weight:800;letter-spacing:1.2px}.runner-main h2{font-size:39px;margin:9px 0 13px;line-height:1.04}.timer{font-variant-numeric:tabular-nums;font-size:88px;font-weight:850;letter-spacing:-4px}.reps{font-size:72px;font-weight:850;letter-spacing:-2px}.runner-main .detail{font-size:17px;color:var(--muted);margin-top:12px}.runner-main .hint{font-size:14px;color:var(--muted);margin:17px auto 0;max-width:370px;line-height:1.4}.countdown{font-size:104px;font-weight:900;animation:pop .9s ease}@keyframes pop{0%{transform:scale(.65);opacity:.3}60%{transform:scale(1.06);opacity:1}100%{transform:scale(1);opacity:1}}
+.runner-controls{display:grid;grid-template-columns:1fr 1.8fr 1fr;gap:10px}.runner-controls button{padding:17px;border-radius:17px;background:var(--card2);font-weight:750}.runner-controls .mainctl{background:#f5f5f6;color:#08090c}.runner-controls .wide{grid-column:1/-1}.musicbar{margin-top:12px;padding:10px 12px;background:var(--card);border:1px solid var(--line);border-radius:15px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%) translateY(10px);background:#f5f5f6;color:#08090c;padding:11px 15px;border-radius:14px;font-weight:700;opacity:0;pointer-events:none;transition:.2s;z-index:50;white-space:nowrap}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.confirm{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;z-index:40;padding:20px}.confirm.open{display:flex}.confirm-card{width:min(420px,100%);background:#15171c;border:1px solid var(--line);border-radius:24px;padding:20px}.confirm-card p{color:var(--muted);line-height:1.4}.confirm-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+</style>
+</head>
+<body>
+<div class="app">
+<header><h1>Forma</h1><div class="muted" id="dateLabel"></div></header>
+
+<section id="home" class="screen active">
+<div class="hero"><div class="eyebrow">TON COACH PERSONNEL</div><strong id="heroTitle">Prêt pour ta première séance ?</strong><button class="primary" onclick="openEditor()">＋ Créer un entraînement</button></div>
+<div class="grid"><div class="stat"><b id="streak">0</b><span>🔥 jours de suite</span></div><div class="stat"><b id="records">0</b><span>🏆 records</span></div><div class="stat"><b id="countWorkouts">0</b><span>séances terminées</span></div><div class="stat"><b id="totalMinutes">0</b><span>minutes</span></div></div>
+<div class="section-head"><h2>Derniers entraînements</h2></div><div id="homeList" class="list"></div>
+</section>
+
+<section id="workouts" class="screen">
+<div class="section-head"><h2>Mes entraînements</h2><button class="secondary" onclick="openEditor()">＋</button></div>
+<div id="workoutList" class="list"></div>
+</section>
+
+<section id="progress" class="screen">
+<h2>Progression</h2>
+<div class="grid"><div class="stat"><b id="pSessions">0</b><span>séances</span></div><div class="stat"><b id="pStreak">0</b><span>meilleur streak</span></div></div>
+<div class="section-head"><h3>Records personnels</h3></div><div id="recordsList" class="list"></div>
+</section>
+
+<section id="history" class="screen">
+<h2>Historique</h2><div id="historyList" class="list"></div>
+</section>
+</div>
+
+<nav class="bottom"><div class="bottom-inner">
+<button class="tab active" data-tab="home"><span>⌂</span>Accueil</button>
+<button class="tab" data-tab="workouts"><span>◉</span>Entraînements</button>
+<button class="tab" data-tab="progress"><span>↗</span>Progrès</button>
+<button class="tab" data-tab="history"><span>↺</span>Historique</button>
+</div></nav>
+
+<div id="editor" class="modal"><div class="sheet">
+<div class="sheet-head"><h2 id="editorTitle">Nouvel entraînement</h2><button class="close" onclick="closeEditor()">×</button></div>
+<label>Nom</label><input id="workoutName" placeholder="Ex. Full Body A">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px">
+<label class="check"><input id="warmupOn" type="checkbox" checked> Échauffement automatique</label>
+<label class="check"><input id="musicOn" type="checkbox"> Son / musique</label>
+</div>
+<label>Échauffement</label><select id="warmupDuration"><option value="60">1 minute</option><option value="120" selected>2 minutes</option><option value="180">3 minutes</option><option value="300">5 minutes</option></select>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-top:19px"><h3>Exercices</h3><button class="secondary" onclick="addExercise()">＋ Exercice</button></div>
+<div id="exerciseEdits"></div>
+<button class="primary" style="margin-top:12px" onclick="saveWorkout()">Enregistrer</button>
+</div></div>
+
+<div id="confirm" class="confirm"><div class="confirm-card">
+<h3 id="confirmTitle">Supprimer ?</h3><p id="confirmText"></p>
+<div class="confirm-actions"><button class="secondary" onclick="closeConfirm()">Annuler</button><button class="primary danger" onclick="confirmDelete()">Supprimer</button></div>
+</div></div>
+
+<div id="runner" class="runner"><div class="runner-inner">
+<div class="runner-top"><button class="secondary" onclick="closeRunner()">Quitter</button><span id="runnerProgress">1 / 1</span></div>
+<div class="progressbar"><i id="runnerBar"></i></div>
+<div class="runner-main"><div class="label" id="runnerPhase">EXERCICE</div><h2 id="runnerExercise">—</h2><div id="runnerValue" class="timer">00:30</div><div class="detail" id="runnerDetail">—</div><div class="hint" id="runnerHint"></div><div class="musicbar" id="musicBar" style="display:none"><span>🎵 Son Forma</span><button class="mini" onclick="toggleMusic()">▶</button></div></div>
+<div class="runner-controls" id="runnerControls"></div>
+</div></div>
+<div id="toast" class="toast"></div>
+
+<script>
+const KEY='forma_v4_data';
+let raw=JSON.parse(localStorage.getItem(KEY)||'null');
+let data=raw||{workouts:[],history:[],records:{}};
+if(!data.workouts)data.workouts=[];if(!data.history)data.history=[];if(!data.records)data.records={};
+let editingId=null,deleteId=null,runner=null,timer=null,running=false,remaining=0,countdownTimer=null,audio=null;
+
+const $=id=>document.getElementById(id);
+function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,9)}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function toast(t){$('toast').textContent=t;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),1800)}
+function showTab(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id===id));document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===id))}
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+
+function normalizeWorkout(w){
+  return {id:w.id||uid(),name:w.name||'Entraînement',warmup:w.warmup!==false,warmupDuration:w.warmupDuration||120,music:!!w.music,exercises:(w.exercises||[]).map(e=>({
+    name:e.name||'Exercice',type:e.type||'reps',sets:e.sets||1,value:e.value||e.seconds||30,rest:e.rest||0,alternating:!!e.alternating,note:e.note||'',favorite:!!e.favorite
+  }))};
+}
+data.workouts=data.workouts.map(normalizeWorkout);
+
+function streakInfo(){
+ const days=[...new Set(data.history.map(h=>new Date(h.date).toISOString().slice(0,10)))].sort().reverse();
+ if(!days.length)return {current:0,best:0};
+ let best=1,run=1;for(let i=1;i<days.length;i++){const a=new Date(days[i-1]),b=new Date(days[i]);const diff=(a-b)/86400000;if(diff===1)run++;else run=1;best=Math.max(best,run)}
+ let current=1;for(let i=1;i<days.length;i++){const diff=(new Date(days[i-1])-new Date(days[i]))/86400000;if(diff===1)current++;else break}
+ const today=new Date();today.setHours(0,0,0,0);const latest=new Date(days[0]);latest.setHours(0,0,0,0);if((today-latest)/86400000>1)current=0;
+ return {current,best};
+}
+function render(){
+ $('dateLabel').textContent=new Intl.DateTimeFormat('fr-FR',{weekday:'short',day:'numeric',month:'short'}).format(new Date());
+ const si=streakInfo();$('streak').textContent=si.current;$('pStreak').textContent=si.best;$('countWorkouts').textContent=data.history.length;$('pSessions').textContent=data.history.length;
+ $('totalMinutes').textContent=Math.round(data.history.reduce((a,h)=>a+(h.minutes||0),0));$('records').textContent=Object.keys(data.records).length;
+ $('heroTitle').textContent=data.workouts.length?`${data.workouts.length} entraînement${data.workouts.length>1?'s':''} prêt${data.workouts.length>1?'s':''}.`:'Prêt pour ta première séance ?';
+ renderWorkoutList($('workoutList'));renderWorkoutList($('homeList'),true);renderHistory();renderRecords();
+}
+function renderWorkoutList(list,limit=false){
+ list.innerHTML='';let arr=limit?data.workouts.slice(0,3):data.workouts;
+ if(!arr.length){list.innerHTML='<div class="empty">Aucun entraînement.<br>Crée ton premier programme.</div>';return}
+ arr.forEach(w=>{
+  const mins=Math.max(1,Math.round(w.exercises.reduce((a,e)=>a+(e.type==='time'?e.value*e.sets:e.sets*10)+e.rest*Math.max(0,e.sets-1),0)/60)+(w.warmup?w.warmupDuration/60:0));
+  const d=document.createElement('div');d.className='row';d.innerHTML=`<div class="row-main"><div class="info"><b>${w.favorite?'★ ':''}${esc(w.name)}</b><span>${w.exercises.length} exercice${w.exercises.length>1?'s':''} · ~${mins} min</span>${w.warmup?'<div class="badge">🔥 Échauffement</div>':''}</div><div class="actions"><button class="mini" onclick="startWorkout('${w.id}')">▶</button>${!limit?`<button class="mini" onclick="toggleFavorite('${w.id}')">☆</button><button class="mini" onclick="openEditor('${w.id}')">Modifier</button><button class="mini danger" onclick="askDelete('${w.id}')">Suppr.</button>`:''}</div></div>`;list.appendChild(d)
+ });
+}
+function renderHistory(){
+ const list=$('historyList');list.innerHTML='';if(!data.history.length){list.innerHTML='<div class="empty">Tes séances terminées apparaîtront ici.</div>';return}
+ data.history.slice().reverse().forEach(h=>{const d=document.createElement('div');d.className='row';d.innerHTML=`<div class="row-main"><div class="info"><b>${esc(h.name)}</b><span>${new Date(h.date).toLocaleDateString('fr-FR')} · ${h.minutes} min · ${h.exercises||0} exercices</span></div><span class="good">✓</span></div>`;list.appendChild(d)})
+}
+function renderRecords(){
+ const list=$('recordsList');list.innerHTML='';const entries=Object.entries(data.records);
+ if(!entries.length){list.innerHTML='<div class="empty">Tes records apparaîtront ici après tes premières séances.</div>';return}
+ entries.forEach(([name,r])=>{const d=document.createElement('div');d.className='row';d.innerHTML=`<div class="info"><b>${esc(name)}</b><span>Meilleur : ${r.value} ${r.type==='time'?'sec':'répétitions'} · ${new Date(r.date).toLocaleDateString('fr-FR')}</span></div><span>🏆</span>`;list.appendChild(d)})
+}
+
+function openEditor(id=null){
+ editingId=id;const w=id?data.workouts.find(x=>x.id===id):null;$('editorTitle').textContent=w?'Modifier l’entraînement':'Nouvel entraînement';$('workoutName').value=w?.name||'';$('warmupOn').checked=w?w.warmup!==false:true;$('warmupDuration').value=w?.warmupDuration||120;$('musicOn').checked=!!w?.music;$('exerciseEdits').innerHTML='';
+ (w?.exercises||[{name:'',type:'reps',sets:3,value:10,rest:30,alternating:false,note:'',favorite:false}]).forEach(e=>addExercise(e));$('editor').classList.add('open')
+}
+function closeEditor(){$('editor').classList.remove('open')}
+function addExercise(e={name:'',type:'reps',sets:3,value:10,rest:30,alternating:false,note:'',favorite:false}){
+ const d=document.createElement('div');d.className='exercise-edit';d.dataset.type=e.type;d.dataset.favorite=e.favorite?'1':'0';
+ d.innerHTML=`<div class="exercise-edit-top"><input class="ex-name" placeholder="Nom de l’exercice" value="${esc(e.name)}"><button class="mini" onclick="toggleExerciseFavorite(this)">${e.favorite?'★':'☆'}</button><button class="mini danger" onclick="this.closest('.exercise-edit').remove()">Suppr.</button></div>
+ <label>Format</label><div class="type-grid"><button type="button" class="type-btn ${e.type==='reps'?'active':''}" onclick="setType(this,'reps')">Répétitions</button><button type="button" class="type-btn ${e.type==='time'?'active':''}" onclick="setType(this,'time')">Temps</button></div>
+ <div class="exercise-fields"><div><label>Séries</label><input class="ex-sets" type="number" min="1" value="${e.sets}"></div><div><label class="value-label">${e.type==='reps'?'Répétitions':'Durée (sec)'}</label><input class="ex-value" type="number" min="1" value="${e.value}"></div><div><label>Repos (sec)</label><input class="ex-rest" type="number" min="0" value="${e.rest}"></div></div>
+ <label class="check"><input class="ex-alt" type="checkbox" ${e.alternating?'checked':''}> ↔️ Alterner gauche / droite</label>
+ <label>Note / consigne</label><textarea class="ex-note" placeholder="Ex. dos droit, mouvement contrôlé…">${esc(e.note)}</textarea>`;
+ $('exerciseEdits').appendChild(d)
+}
+function setType(btn,type){const d=btn.closest('.exercise-edit');d.dataset.type=type;d.querySelectorAll('.type-btn').forEach(x=>x.classList.remove('active'));btn.classList.add('active');d.querySelector('.value-label').textContent=type==='reps'?'Répétitions':'Durée (sec)'}
+function toggleExerciseFavorite(btn){const d=btn.closest('.exercise-edit');d.dataset.favorite=d.dataset.favorite==='1'?'0':'1';btn.textContent=d.dataset.favorite==='1'?'★':'☆'}
+function saveWorkout(){
+ const name=$('workoutName').value.trim()||'Entraînement';
+ const exercises=[...document.querySelectorAll('.exercise-edit')].map(d=>({name:d.querySelector('.ex-name').value.trim()||'Exercice',type:d.dataset.type,sets:Math.max(1,+d.querySelector('.ex-sets').value||1),value:Math.max(1,+d.querySelector('.ex-value').value||1),rest:Math.max(0,+d.querySelector('.ex-rest').value||0),alternating:d.querySelector('.ex-alt').checked,note:d.querySelector('.ex-note').value.trim(),favorite:d.dataset.favorite==='1'}));
+ if(!exercises.length){toast('Ajoute au moins un exercice');return}
+ const w={id:editingId||uid(),name,warmup:$('warmupOn').checked,warmupDuration:+$('warmupDuration').value,music:$('musicOn').checked,exercises};
+ if(editingId){const i=data.workouts.findIndex(x=>x.id===editingId);w.favorite=data.workouts[i].favorite;data.workouts[i]=w}else data.workouts.push(w);
+ save();closeEditor();showTab('workouts');toast('Programme enregistré ✓')
+}
+function toggleFavorite(id){const w=data.workouts.find(x=>x.id===id);if(w){w.favorite=!w.favorite;save();toast(w.favorite?'Ajouté aux favoris':'Retiré des favoris')}}
+function askDelete(id){deleteId=id;const w=data.workouts.find(x=>x.id===id);$('confirmTitle').textContent='Supprimer cet entraînement ?';$('confirmText').textContent=`« ${w?.name||''} » sera supprimé définitivement.`;$('confirm').classList.add('open')}
+function closeConfirm(){$('confirm').classList.remove('open');deleteId=null}
+function confirmDelete(){if(deleteId){data.workouts=data.workouts.filter(w=>w.id!==deleteId);save();toast('Entraînement supprimé')}closeConfirm()}
+
+function buildSteps(w){
+ const steps=[];if(w.warmup)steps.push({type:'warmup',name:'Échauffement',value:w.warmupDuration,detail:'Mets ton corps en route',hint:'Forma lance automatiquement ton échauffement.'});
+ w.exercises.forEach((e,ei)=>{for(let s=1;s<=e.sets;s++){
+   const side=e.alternating?(s%2?'Gauche':'Droite'):null;
+   steps.push({type:e.type==='time'?'time':'reps',name:e.name,value:e.value,detail:e.type==='time'?`Série ${s} / ${e.sets}${side?' · '+side:''}`:`${e.value} répétitions · série ${s} / ${e.sets}${side?' · '+side:''}`,note:e.note,side,rest:e.rest});
+   if(e.rest>0 && !(ei===w.exercises.length-1&&s===e.sets))steps.push({type:'rest',name:'Repos',value:e.rest,detail:'Récupère et prépare la suite',hint:'Le repos est automatique.'});
+ }});
+ return steps;
+}
+function startWorkout(id){
+ const w=data.workouts.find(x=>x.id===id);if(!w)return;runner={workout:w,steps:buildSteps(w),idx:0,started:Date.now(),audioOn:w.music};$('runner').classList.add('open');loadStep(true)
+}
+function loadStep(auto=true){
+ clearInterval(timer);clearInterval(countdownTimer);running=false;const s=runner.steps[runner.idx];remaining=s.value;
+ $('runnerProgress').textContent=`${runner.idx+1} / ${runner.steps.length}`;$('runnerBar').style.width=`${(runner.idx/runner.steps.length)*100}%`;
+ $('runnerPhase').textContent=s.type==='rest'?'REPOS':s.type==='warmup'?'ÉCHAUFFEMENT':s.type==='reps'?'RÉPÉTITIONS':'CHRONO';$('runnerExercise').textContent=s.name;
+ const value=$('runnerValue');value.className=s.type==='reps'?'reps':'timer';value.textContent=s.type==='reps'?s.value:fmt(remaining);
+ $('runnerDetail').textContent=s.detail;$('runnerHint').textContent=s.note?`📝 ${s.note}`:(s.type==='reps'?'Quand la série est terminée, valide-la. Le reste s’enchaîne automatiquement.':s.type==='warmup'?'L’échauffement est automatique.':s.type==='rest'?'Le repos est automatique.':'Le chrono est automatique.');
+ $('musicBar').style.display=runner.audioOn?'flex':'none';renderControls(s);
+ if(auto && s.type!=='reps')beginCountdown(()=>startTimer()); // warmup, time and rest
+ else if(auto && s.type==='reps')beginCountdown(null);
+}
+function renderControls(s){
+ const c=$('runnerControls');
+ if(s.type==='reps')c.innerHTML=`<button onclick="previousStep()">←</button><button class="mainctl" onclick="completeReps()">Série terminée ✓</button><button onclick="nextStep()">→</button>`;
+ else c.innerHTML=`<button onclick="previousStep()">←</button><button class="mainctl" id="timerBtn" onclick="toggleTimer()">${running?'Pause':'Démarrer'}</button><button onclick="nextStep()">Passer →</button>`;
+}
+function beginCountdown(after){
+ clearInterval(countdownTimer);let n=3;const value=$('runnerValue');value.className='countdown';value.textContent=n;
+ countdownTimer=setInterval(()=>{n--;if(n>0){value.textContent=n}else{clearInterval(countdownTimer);const s=runner.steps[runner.idx];value.className=s.type==='reps'?'reps':'timer';value.textContent=s.type==='reps'?s.value:fmt(remaining);if(navigator.vibrate)navigator.vibrate(40);if(after)after()}},1000)
+}
+function startTimer(){if(running)return;running=true;updateTimerButton();timer=setInterval(()=>{remaining--;const s=runner.steps[runner.idx];$('runnerValue').textContent=fmt(remaining);if(remaining<=0){clearInterval(timer);running=false;if(navigator.vibrate)navigator.vibrate([120,60,120]);speak(s.type==='rest'?'Prochain exercice.':s.type==='warmup'?'Échauffement terminé.':'Repos.');advanceAuto()}},1000)}
+function toggleTimer(){if(running){clearInterval(timer);running=false;updateTimerButton()}else startTimer()}
+function updateTimerButton(){const b=$('timerBtn');if(b)b.textContent=running?'Pause':'Reprendre'}
+function completeReps(){if(runner.steps[runner.idx].type!=='reps')return;if(navigator.vibrate)navigator.vibrate(70);speak('Série terminée.');advanceAuto()}
+function advanceAuto(){if(runner.idx<runner.steps.length-1){runner.idx++;loadStep(true)}else finishWorkout()}
+function nextStep(){clearInterval(timer);if(runner.idx<runner.steps.length-1){runner.idx++;loadStep(true)}else finishWorkout()}
+function previousStep(){if(runner.idx>0){runner.idx--;loadStep(false)}}
+function fmt(n){return String(Math.floor(n/60)).padStart(2,'0')+':'+String(Math.floor(n%60)).padStart(2,'0')}
+function speak(text){if('speechSynthesis' in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='fr-FR';u.rate=.95;speechSynthesis.speak(u)}}
+function finishWorkout(){
+ clearInterval(timer);clearInterval(countdownTimer);running=false;
+ const mins=Math.max(1,Math.round((Date.now()-runner.started)/60000));data.history.push({id:uid(),name:runner.workout.name,date:new Date().toISOString(),minutes:mins,exercises:runner.workout.exercises.length});
+ runner.workout.exercises.forEach(e=>{if(e.type==='reps'){const old=data.records[e.name];if(!old||e.value>old.value)data.records[e.name]={value:e.value,type:e.type,date:new Date().toISOString()}}});
+ save();$('runner').classList.remove('open');showTab('progress');speak('Séance terminée. Bravo.');toast('Séance terminée 🎉')
+}
+function closeRunner(){clearInterval(timer);clearInterval(countdownTimer);running=false;if('speechSynthesis'in window)speechSynthesis.cancel();$('runner').classList.remove('open')}
+function toggleMusic(){
+ if(!audio){audio=new AudioContext();const o=audio.createOscillator();const g=audio.createGain();o.frequency.value=220;g.gain.value=.015;o.connect(g).connect(audio.destination);o.start();o.stop(audio.currentTime+999999);toast('Son Forma activé')}
+ else if(audio.state==='running'){audio.suspend();toast('Son en pause')}else{audio.resume();toast('Son activé')}
+}
+render();if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+</body></html>
